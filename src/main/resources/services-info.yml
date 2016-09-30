@@ -1,0 +1,4 @@
+servicesInstances:
+  - class: it.smartcommunitylab.mobilityservice.services.test.TestService
+    cronRefresh: "5 * * * * *"
+    failCronRefresh: "*/10 * * * * *"
