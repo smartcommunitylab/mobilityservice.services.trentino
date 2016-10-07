@@ -29,7 +29,6 @@ public class MobilityServicesManager {
 	private static final String SERVICE_ID = "serviceId";
 	private static final String PARAMETERS = "parameters";
 	private static final String CRON_REFRESH = "cronRefresh";
-	private static final String FAILED_CRON_REFRESH = "failCronRefresh";
 
 	private static final String ENABLED = "enabled";
 
@@ -68,7 +67,6 @@ public class MobilityServicesManager {
 			Class c = Class.forName((String) map.get(CLASS));
 			MobilityService service = (MobilityService) c.newInstance();
 			service.setCronRefresh((String) map.get(CRON_REFRESH));
-			service.setFailCronRefresh((String) map.get(FAILED_CRON_REFRESH));
 			service.setServiceId(c.getSimpleName());
 			if (map.containsKey(PARAMETERS)) {
 				service.setParameters((Map<String, Object>) map.get(PARAMETERS));
@@ -80,17 +78,12 @@ public class MobilityServicesManager {
 				service.setEnabled((Boolean) map.get(ENABLED));
 			}
 			if (service.getEnabled() == null || service.getEnabled().booleanValue()) {
-				// CronTrigger trigger = new
-				// CronTrigger(service.getCronRefresh());
-				// MobilityServiceTask task = new MobilityServiceTask(this,
-				// service, processor);
-				// scheduler.schedule(task, trigger);
 				MobilityServiceObjectsContainer old = storage.load(service);
 				if (old != null) {
 					old.setFails(0);
 					storage.save(old, false);
 				}
-				schedule(service, false);
+				schedule(service);
 				logger.info("Scheduled service " + service.getServiceId());
 			} else {
 				logger.info("Not scheduling disabled service " + service.getServiceId());
@@ -122,7 +115,6 @@ public class MobilityServicesManager {
 				String msg = "Service " + service.getClass().getSimpleName() + " resumed.";
 				logger.warn(msg);
 				notifier.sendServiceNotification(msg, "");
-				schedule(service, false);
 			}
 			storage.save(container, true);
 			logger.debug("Invoked service " + service.getClass().getSimpleName() + ".");
@@ -142,9 +134,6 @@ public class MobilityServicesManager {
 				storage.save(container, true);
 				logger.warn("No stored data found for " + service.getClass().getSimpleName() + ".");
 			}
-			if (container.getFails() == 1) {
-				schedule(service, true);
-			}
 			if (container.getFails() == 2) {
 				// failed
 				e.printStackTrace();
@@ -161,32 +150,13 @@ public class MobilityServicesManager {
 		return container;
 	}
 
-	private synchronized void schedule(MobilityService service, boolean taskFailed) {
-		String schedule;
-		String reason;
-		if (!scheduledFutures.containsKey(service)) {
-			schedule = service.getCronRefresh();
-			CronTrigger trigger = new CronTrigger(schedule);
-			MobilityServiceTask task = new MobilityServiceTask(this, service, processor);
-			ScheduledFuture<MobilityService> future = scheduler.schedule(task, trigger);
-			scheduledFutures.put(service, future);
-			reason = "START";
-		} else {
-			scheduledFutures.get(service).cancel(false);
-
-			if (taskFailed && service.getFailCronRefresh() != null) {
-				schedule = service.getFailCronRefresh();
-				reason = "FAIL";
-			} else {
-				schedule = service.getCronRefresh();
-				reason = "RESUME";
-			}
-			CronTrigger trigger = new CronTrigger(schedule);
-			MobilityServiceTask task = new MobilityServiceTask(this, service, processor);
-			ScheduledFuture<MobilityService> future = scheduler.schedule(task, trigger);
-			scheduledFutures.put(service, future);
-		}
-		logger.info("Scheduling for service " + service.getServiceId() + ": " + schedule + ". Reason: " + reason + ".");
+	private synchronized void schedule(MobilityService service) {
+		String schedule = service.getCronRefresh();
+		CronTrigger trigger = new CronTrigger(schedule);
+		MobilityServiceTask task = new MobilityServiceTask(this, service, processor);
+		ScheduledFuture<MobilityService> future = scheduler.schedule(task, trigger);
+		scheduledFutures.put(service, future);
+		logger.info("Scheduling service " + service.getServiceId() + ": " + schedule);
 
 	}
 

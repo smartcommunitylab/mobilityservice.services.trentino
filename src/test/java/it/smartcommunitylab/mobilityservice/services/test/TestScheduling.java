@@ -11,7 +11,7 @@ public class TestScheduling {
 		context.register(MobilityServicesTestConfig.class);
 		context.refresh();
 		
-		Thread.sleep(1000 * 60 * 3);
+		Thread.sleep(1000 * 30);
 	}
 	
 }

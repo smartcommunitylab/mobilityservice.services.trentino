@@ -16,8 +16,6 @@ public abstract class MobilityService {
 	
 	protected String cronRefresh;
 	
-	protected String failCronRefresh;
-	
 	protected Boolean enabled;
 
 	public String getServiceId() {
@@ -52,14 +50,6 @@ public abstract class MobilityService {
 		this.cronRefresh = cronRefresh;
 	}
 	
-	public String getFailCronRefresh() {
-		return failCronRefresh;
-	}
-
-	public void setFailCronRefresh(String failCronRefresh) {
-		this.failCronRefresh = failCronRefresh;
-	}
-
 	public Boolean getEnabled() {
 		return enabled;
 	}
