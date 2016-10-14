@@ -1,3 +1,59 @@
 servicesInstances:
-  - class: it.smartcommunitylab.mobilityservice.services.test.TestService
-    cronRefresh: "*/10 * * * * *"
+  - class: it.smartcommunitylab.mobilityservice.services.service.tobike.TobikeService
+    alias: bikesharing-rovereto
+    refresh: "0 * * * * *"
+    parameters:
+      user: "rovereto"
+      password: 
+      code: "5061"
+    info:
+      name: rovereto
+      place: Rovereto
+      agencyId: BIKE_SHARING_TOBIKE_ROVERETO
+    enabled: true
+  - class: it.smartcommunitylab.mobilityservice.services.service.tobike.TobikeService
+    alias: bikesharing-pergine
+    refresh: "0 * * * * *"
+    parameters:
+      user: "rovereto"
+      password: 
+      code: "5060"
+    info:
+      name: pergine_valsugana
+      place: Pergine Valsugana
+      agencyId: BIKE_SHARING_TOBIKE_PERGINE_VALSUGANA
+    enabled: true    
+  - class: it.smartcommunitylab.mobilityservice.services.service.tobike.TobikeService
+    alias: bikesharing-trento
+    refresh: "0 * * * * *"
+    parameters:
+      user: "rovereto"
+      password: 
+      code: "5059"
+    info:
+      name: trento
+      place: Trento    
+      agencyId: BIKE_SHARING_TOBIKE_TRENTO  
+    enabled: true        
+  - class: it.smartcommunitylab.mobilityservice.services.service.oraritreni.TreniService
+    alias: treni
+    refresh: "0 * * * * *"
+    parameters:
+      stazione: trento
+    enabled: true
+  - class: it.smartcommunitylab.mobilityservice.services.service.trentomale.TrentoMaleService
+    alias: trentomale
+    refresh: "0 * * * * *"
+    enabled: true  
+  - class: it.smartcommunitylab.mobilityservice.services.service.ordinanzerovereto.OrdinanzeRoveretoService
+    alias: ordinanze-rovereto
+    refresh: "0 * * * * *"
+    enabled: false
+  - class: it.smartcommunitylab.mobilityservice.services.service.parcheggi.ParcheggiRoveretoService
+    alias: parcheggi-rovereto
+    refresh: "0 * * * * *"
+    enabled: true
+  - class: it.smartcommunitylab.mobilityservice.services.service.parcheggi.ParcheggiTrentoService
+    alias: parcheggi-trento
+    refresh: "0 * * * * *"
+    enabled: true

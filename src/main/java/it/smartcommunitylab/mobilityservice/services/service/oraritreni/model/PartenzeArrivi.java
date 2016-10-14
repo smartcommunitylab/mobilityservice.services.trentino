@@ -2,11 +2,8 @@ package it.smartcommunitylab.mobilityservice.services.service.oraritreni.model;
 
 import it.smartcommunitylab.mobilityservice.services.MobilityServiceObject;
 
-import org.springframework.data.annotation.Id;
+public class  PartenzeArrivi extends MobilityServiceObject {
 
-public class  PartenzeArrivi  extends MobilityServiceObject {
-
-	@Id
 	private String stazione;
 	private Partenze part;
 	private Arrivi arr;

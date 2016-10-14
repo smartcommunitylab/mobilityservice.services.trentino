@@ -2,11 +2,8 @@ package it.smartcommunitylab.mobilityservice.services.service.trentomale.model;
 
 import it.smartcommunitylab.mobilityservice.services.MobilityServiceObject;
 
-import org.springframework.data.annotation.Id;
-
 public class TrentoMaleTrain extends MobilityServiceObject {
 
-	@Id
 	private int id;
 	private int number;
 	private String time;

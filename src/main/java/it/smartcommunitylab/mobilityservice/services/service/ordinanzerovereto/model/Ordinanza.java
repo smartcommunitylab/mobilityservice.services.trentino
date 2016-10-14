@@ -4,11 +4,8 @@ import it.smartcommunitylab.mobilityservice.services.MobilityServiceObject;
 
 import java.util.List;
 
-import org.springframework.data.annotation.Id;
-
 public class Ordinanza extends MobilityServiceObject {
 
-	@Id
 	private String id;
 	private String oggetto;
 	private String data;

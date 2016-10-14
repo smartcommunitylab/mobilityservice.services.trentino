@@ -2,11 +2,8 @@ package it.smartcommunitylab.mobilityservice.services.test;
 
 import it.smartcommunitylab.mobilityservice.services.MobilityServiceObject;
 
-import org.springframework.data.annotation.Id;
-
 public class TestMobilityServiceObject extends MobilityServiceObject {
 
-	@Id
 	private int id;
 	
 	private boolean result;

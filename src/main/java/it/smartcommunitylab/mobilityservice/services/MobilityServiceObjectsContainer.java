@@ -3,11 +3,8 @@ package it.smartcommunitylab.mobilityservice.services;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.data.annotation.Id;
-
 public class MobilityServiceObjectsContainer {
 
-	@Id
 	private String id;
 	
 	private String serviceId;
@@ -15,8 +12,6 @@ public class MobilityServiceObjectsContainer {
 	private Map<String, Object> info;
 	private List<MobilityServiceObject> objects;
 	private long timestamp;
-	
-	private long fails;
 	
 	public MobilityServiceObjectsContainer() {
 	}
@@ -75,15 +70,5 @@ public class MobilityServiceObjectsContainer {
 	public void setTimestamp(long timestamp) {
 		this.timestamp = timestamp;
 	}
-
-	public long getFails() {
-		return fails;
-	}
-
-	public void setFails(long fails) {
-		this.fails = fails;
-	}
-
-
 	
 }

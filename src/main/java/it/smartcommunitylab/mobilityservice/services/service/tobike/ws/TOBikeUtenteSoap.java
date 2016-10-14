@@ -2,6 +2,7 @@
 package it.smartcommunitylab.mobilityservice.services.service.tobike.ws;
 
 import java.math.BigDecimal;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebResult;

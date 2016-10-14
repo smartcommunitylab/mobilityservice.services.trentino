@@ -1,6 +1,7 @@
 package it.smartcommunitylab.mobilityservice.services;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 public class MobilityServiceObject {
 

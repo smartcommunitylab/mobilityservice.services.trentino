@@ -2,11 +2,8 @@ package it.smartcommunitylab.mobilityservice.services.service.parcheggi.model;
 
 import it.smartcommunitylab.mobilityservice.services.MobilityServiceObject;
 
-import org.springframework.data.annotation.Id;
-
 public class Parcheggio extends MobilityServiceObject {
 
-	@Id
 	private String id;
 	private String address;
 	private String places;

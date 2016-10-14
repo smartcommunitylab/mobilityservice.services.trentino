@@ -1,5 +1,6 @@
 package it.smartcommunitylab.mobilityservice.services.service.oraritreni;
 
+import it.sayservice.platform.smartplanner.data.message.alerts.AlertDelay;
 import it.sayservice.xss.api.XSSParserConfiguration;
 import it.sayservice.xss.api.data.XSSData;
 import it.sayservice.xss.api.data.XSSEvent;
@@ -11,7 +12,10 @@ import it.sayservice.xss.internal.dom.xml.XMLNode;
 import it.smartcommunitylab.mobilityservice.services.MobilityService;
 import it.smartcommunitylab.mobilityservice.services.MobilityServiceException;
 import it.smartcommunitylab.mobilityservice.services.MobilityServiceObject;
+import it.smartcommunitylab.mobilityservice.services.MobilityServiceObjectsContainer;
 import it.smartcommunitylab.mobilityservice.services.service.oraritreni.model.PartenzeArrivi;
+import it.smartcommunitylab.mobilityservice.services.util.GenericTrain;
+import it.smartcommunitylab.mobilityservice.services.util.TrainsConverter;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,7 +30,6 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.lobobrowser.html.UserAgentContext;
 import org.lobobrowser.html.parser.HtmlParser;
 import org.lobobrowser.html.test.SimpleUserAgentContext;
@@ -35,7 +38,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import com.mashape.unirest.http.Unirest;
 
 @Component
 public class TreniService extends MobilityService {
@@ -96,7 +101,6 @@ public class TreniService extends MobilityService {
 			XSSData data = factory.newParser("treni").parse(new XMLNode(xmlNode), config);
 
 			String json = XSSDataToJSON(data, false, false);
-//			System.out.println(json);
 			PartenzeArrivi pa = mapper.readValue(json, PartenzeArrivi.class);
 
 			result.add(pa);
@@ -105,6 +109,29 @@ public class TreniService extends MobilityService {
 		} catch (Exception e) {
 			throw new MobilityServiceException(e);
 		}
+	}
+	
+	@Override
+	protected int publishData(MobilityServiceObjectsContainer data) throws MobilityServiceException {
+		try {
+			List<AlertDelay> list = Lists.newArrayList();
+			for (MobilityServiceObject bs : data.getObjects()) {
+				PartenzeArrivi pa = (PartenzeArrivi)bs;
+			
+				List<GenericTrain> gts = TrainsConverter.buildTrain(pa);
+				for (GenericTrain gt: gts) {
+					AlertDelay ad = TrainsConverter.checkDelay(gt);
+					list.add(ad);
+				}
+			}
+
+//			ObjectMapper mapper = new ObjectMapper();
+//			mapper.writerWithDefaultPrettyPrinter().writeValue(new File("treni.txt"), list);
+			return Unirest.post("http://localhost:8080/core.mobility/servicedata/publishAlertDelays").header("Accept", "application/json").header("Content-Type", "application/json").body(list).asString().getStatus();
+		} catch (Exception e) {
+			throw new MobilityServiceException(e);
+		}
+
 	}
 
 	private Element readNode(InputStream is) {
@@ -166,5 +193,7 @@ public class TreniService extends MobilityService {
 		}
 		return s;
 	}
+	
+
 
 }

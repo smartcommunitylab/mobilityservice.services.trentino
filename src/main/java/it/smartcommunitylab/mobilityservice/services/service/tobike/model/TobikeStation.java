@@ -2,11 +2,8 @@ package it.smartcommunitylab.mobilityservice.services.service.tobike.model;
 
 import it.smartcommunitylab.mobilityservice.services.MobilityServiceObject;
 
-import org.springframework.data.annotation.Id;
-
 public class TobikeStation extends MobilityServiceObject {
 
-	@Id
 	private String codice;
 	private String nome;
 	private String indirizzo;

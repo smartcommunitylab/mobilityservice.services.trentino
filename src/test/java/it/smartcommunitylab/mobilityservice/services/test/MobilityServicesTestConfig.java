@@ -16,18 +16,13 @@
 
 package it.smartcommunitylab.mobilityservice.services.test;
 
-import java.net.UnknownHostException;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-
-import com.mongodb.Mongo;
 
 @ComponentScan("it.smartcommunitylab.mobilityservice.services")
 @Configuration
@@ -52,9 +47,4 @@ public class MobilityServicesTestConfig {
 		return scheduler;
 	}
 	
-	@Bean(name = "domainMongoTemplate")
-	public static MongoTemplate getMongoTemplate() throws UnknownHostException {
-		return new MongoTemplate(new Mongo(), MOBILITY_SERVICES);
-	}
-
 }

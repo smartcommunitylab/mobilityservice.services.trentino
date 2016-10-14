@@ -2,7 +2,7 @@ package it.smartcommunitylab.mobilityservice.services.service.trentomale.model;
 
 public class Treno {
 
-    private Integer  currentDelay;
+    private Integer currentDelay;
     private Integer position;
     private Integer trainId;
     private Integer trainNumber;

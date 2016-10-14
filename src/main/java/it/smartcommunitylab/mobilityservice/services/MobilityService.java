@@ -14,10 +14,12 @@ public abstract class MobilityService {
 	
 	protected Map<String, Object> info;
 	
-	protected String cronRefresh;
-	
-	protected Boolean enabled;
+	protected String refresh;
 
+	protected Boolean enabled = true;
+
+	protected String alias;	
+	
 	public String getServiceId() {
 		return serviceId;
 	}
@@ -42,14 +44,14 @@ public abstract class MobilityService {
 		this.info = info;
 	}
 
-	public String getCronRefresh() {
-		return cronRefresh;
+	public String getRefresh() {
+		return refresh;
 	}
 
-	public void setCronRefresh(String cronRefresh) {
-		this.cronRefresh = cronRefresh;
+	public void setRefresh(String refresh) {
+		this.refresh = refresh;
 	}
-	
+
 	public Boolean getEnabled() {
 		return enabled;
 	}
@@ -58,14 +60,25 @@ public abstract class MobilityService {
 		this.enabled = enabled;
 	}
 
+	public String getAlias() {
+		return alias;
+	}
+
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
+
 	public String generateId() {
 		return this.getClass().getSimpleName() + (parameters != null ? ("_" + Integer.toHexString(parameters.hashCode())) : "");
 	}
 
-		abstract protected List<MobilityServiceObject> invokeService() throws MobilityServiceException;
+	abstract protected List<MobilityServiceObject> invokeService() throws MobilityServiceException;
+	
+	abstract protected int publishData(MobilityServiceObjectsContainer data) throws MobilityServiceException;
 
 	@Override
 	public String toString() {
-		return this.getClass().getSimpleName() + ": " + parameters;
+		return "[" + (alias != null ? alias : (serviceId + ": " + parameters)) + "]";
 	}
+
 }

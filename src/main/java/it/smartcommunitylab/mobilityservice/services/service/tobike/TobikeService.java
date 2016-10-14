@@ -15,22 +15,36 @@
  ******************************************************************************/
 package it.smartcommunitylab.mobilityservice.services.service.tobike;
 
+import it.sayservice.platform.smartplanner.data.message.StopId;
+import it.sayservice.platform.smartplanner.data.message.alerts.AlertParking;
+import it.sayservice.platform.smartplanner.data.message.alerts.AlertType;
+import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
 import it.smartcommunitylab.mobilityservice.services.MobilityService;
 import it.smartcommunitylab.mobilityservice.services.MobilityServiceException;
 import it.smartcommunitylab.mobilityservice.services.MobilityServiceObject;
+import it.smartcommunitylab.mobilityservice.services.MobilityServiceObjectsContainer;
+import it.smartcommunitylab.mobilityservice.services.service.tobike.model.Station;
 import it.smartcommunitylab.mobilityservice.services.service.tobike.model.TobikeStation;
 import it.smartcommunitylab.mobilityservice.services.service.tobike.ws.TOBikeUtente;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
+import com.mashape.unirest.http.Unirest;
 
 @Component
 public class TobikeService extends MobilityService {
+
+	private static final String BIKE_RENTAL = "BIKE-RENTAL";
+	private static final String NAME = "name";
+	private static final String PLACE = "place";
+	private static final String AGENCY_ID = "agencyId";
 
 	private static ObjectMapper mapper = new ObjectMapper();
 
@@ -67,7 +81,7 @@ public class TobikeService extends MobilityService {
 				tobikeStation.setPosti(posti);
 				tobikeStation.setBiciclette(biciclette);
 				tobikeStation.setStalli(stalli);
-//				tobikeStation.setTimestamp(System.currentTimeMillis());
+				// tobikeStation.setTimestamp(System.currentTimeMillis());
 
 				result.add(tobikeStation);
 			}
@@ -77,5 +91,74 @@ public class TobikeService extends MobilityService {
 			throw new MobilityServiceException(e);
 		}
 	}
+
+	@Override
+	protected int publishData(MobilityServiceObjectsContainer data) throws MobilityServiceException {
+		try {
+			List<AlertParking> alertList = new ArrayList<AlertParking>();
+			List<Station> stations = new ArrayList<Station>();
+			for (MobilityServiceObject bs : data.getObjects()) {
+				TobikeStation s = (TobikeStation) bs;
+
+				AlertParking p = new AlertParking();
+
+				StopId t = new StopId();
+				t.setAgencyId((String) data.getInfo().get(AGENCY_ID));
+				t.setId(s.getNome() + " - " + data.getInfo().get(PLACE));
+				p.setPlace(t);
+
+				p.setCreatorId("");
+				p.setCreatorType(CreatorType.SERVICE);
+				p.setDescription("");
+				p.setType(AlertType.PARKING);
+				p.setId(s.getNome() + " - " + data.getInfo().get(PLACE));
+				p.setNote(s.getIndirizzo());
+				p.setPlacesAvailable(s.getPosti());
+				p.setNoOfvehicles(s.getBiciclette());
+
+				p.setFrom(System.currentTimeMillis());
+				p.setTo(System.currentTimeMillis() + 1000 * 60 * 5);
+
+				p.setId(p.getPlace().getId() + "_" + CreatorType.SERVICE + "_" + p.getFrom() + "_" + p.getTo());
+
+				alertList.add(p);
+				
+				
+				Station station = new Station();
+				station.setId(s.getNome() + " - " + data.getInfo().get(PLACE));
+				station.setAddress(cleanAddress(s.getIndirizzo()));
+				station.setName(s.getNome());
+				station.setPosition(new double[]{s.getLatitude(),s.getLongitude()});
+				station.setBikes(s.getBiciclette());
+				station.setSlots(s.getPosti());
+				station.setTotalSlots(getTotal(s.getStato()));
+				stations.add(station);				
+				
+			}
+//			ObjectMapper mapper = new ObjectMapper();
+//			mapper.writerWithDefaultPrettyPrinter().writeValue(new File("parcheggi_" + data.getInfo().get(AGENCY_ID) + ".txt"), alertList);
+//			mapper.writerWithDefaultPrettyPrinter().writeValue(new File("stazioni_" + data.getInfo().get(AGENCY_ID) + ".txt"), stations);
+			Unirest.post("http://localhost:8080/core.mobility/servicedata/publishBikeStations/" + data.getInfo().get(PLACE) + "/" + data.getInfo().get(AGENCY_ID)).header("Accept", "application/json").header("Content-Type", "application/json").body(stations).asString().getStatus();
+			return Unirest.post("http://localhost:8080/core.mobility/servicedata/publishAlertParkings").header("Accept", "application/json").header("Content-Type", "application/json").body(alertList).asString().getStatus();
+		} catch (Exception e) {
+			throw new MobilityServiceException(e);
+		}
+
+	}
+	
+	private String cleanAddress(String indirizzo) {
+		return indirizzo.replace("\\", "");
+	}	
+	
+	private int getTotal(String stato) {
+		if (StringUtils.hasLength(stato)) {
+			int result = 0;
+			for (int i = 0; i < stato.length(); i++) {
+				if (stato.charAt(i)!='x') result++;
+			}
+			return result;
+		}
+		return 0;
+	}	
 
 }

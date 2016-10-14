@@ -1,24 +1,29 @@
 package it.smartcommunitylab.mobilityservice.services.service.trentomale;
 
+import it.sayservice.platform.smartplanner.data.message.alerts.AlertDelay;
 import it.smartcommunitylab.mobilityservice.services.MobilityService;
 import it.smartcommunitylab.mobilityservice.services.MobilityServiceException;
 import it.smartcommunitylab.mobilityservice.services.MobilityServiceObject;
+import it.smartcommunitylab.mobilityservice.services.MobilityServiceObjectsContainer;
 import it.smartcommunitylab.mobilityservice.services.service.trentomale.model.Orari;
 import it.smartcommunitylab.mobilityservice.services.service.trentomale.model.Orario;
 import it.smartcommunitylab.mobilityservice.services.service.trentomale.model.Stazione;
 import it.smartcommunitylab.mobilityservice.services.service.trentomale.model.Treni;
 import it.smartcommunitylab.mobilityservice.services.service.trentomale.model.Treno;
 import it.smartcommunitylab.mobilityservice.services.service.trentomale.model.TrentoMaleTrain;
+import it.smartcommunitylab.mobilityservice.services.util.GenericTrain;
+import it.smartcommunitylab.mobilityservice.services.util.TrainsConverter;
 
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
+import com.mashape.unirest.http.Unirest;
 
 @Component
 public class TrentoMaleService extends MobilityService {
@@ -88,6 +93,29 @@ public class TrentoMaleService extends MobilityService {
 		} catch (Exception e) {
 			throw new MobilityServiceException(e);
 		}
+	}
+	
+	@Override
+	protected int publishData(MobilityServiceObjectsContainer data) throws MobilityServiceException {
+		try {
+			List<AlertDelay> list = Lists.newArrayList();
+			for (MobilityServiceObject bs : data.getObjects()) {
+				TrentoMaleTrain tmt = (TrentoMaleTrain)bs;
+			
+				GenericTrain gt = TrainsConverter.convertTrentoMale(tmt);
+				AlertDelay ad = TrainsConverter.checkDelay(gt);
+				list.add(ad);
+			}
+
+
+//			ObjectMapper mapper = new ObjectMapper();
+//			mapper.writerWithDefaultPrettyPrinter().writeValue(new File("trentomale.txt"), list);
+//			return 200;
+			return Unirest.post("http://localhost:8080/core.mobility/servicedata/publishAlertDelays").header("Accept", "application/json").header("Content-Type", "application/json").body(list).asString().getStatus();
+		} catch (Exception e) {
+			throw new MobilityServiceException(e);
+		}
+
 	}
 
 	private Stazione findNearest(Treno treno) {

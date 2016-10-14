@@ -31,33 +31,19 @@
 		</dependency>		
 
 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-lgpl</artifactId>
-			<version>1.8.2</version>
-			<type>jar</type>
-		</dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.2.4</version>
+		</dependency>			
+		
+		
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>15.0</version>
 			<type>jar</type>
 		</dependency>
-<!-- 		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-mongodb</artifactId>
-			<version>1.6.2.RELEASE</version>
-		</dependency> -->
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-mongodb</artifactId>
-			<version>1.1.1.RELEASE</version>
-		</dependency>		
 
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.4.3</version>
-		</dependency>
 		<dependency>
 			<groupId>org.lobobrowser.cobra</groupId>
 			<artifactId>cobra</artifactId>
@@ -74,6 +60,14 @@
             <version>1.13</version>
         </dependency>		
 
+
+		<dependency>
+			<groupId>it.sayservice.platform.smartplanner</groupId>
+			<artifactId>smartplanner-beans</artifactId>
+			<version>1.1.12</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
 		<dependency>
 			<groupId>it.sayservice.platform</groupId>
 			<artifactId>xss</artifactId>
@@ -81,24 +75,22 @@
 		</dependency>
 
 
-		<!-- <dependency> <groupId>org.apache.commons</groupId> <artifactId>commons-lang3</artifactId> 
-			<version>3.4</version> </dependency> -->
-
 <!-- 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>Spring-context-support</artifactId>
-			<version>4.0.9.RELEASE</version>
-		</dependency> -->
-		<dependency>
 			<groupId>org.apache.geronimo.specs</groupId>
 			<artifactId>geronimo-commonj_1.1_spec</artifactId>
 			<version>1.0</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 			<version>4.1.6.RELEASE</version>
 		</dependency>
+		<dependency>
+			<groupId>com.mashape.unirest</groupId>
+			<artifactId>unirest-java</artifactId>
+			<version>1.4.9</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
@@ -121,7 +113,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>it.smartcommunitylab.mobilityservice.services.Main</mainClass>
+							<mainClass>it.smartcommunitylab.mobilityservice.services.MobilityMain</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>

@@ -16,33 +16,54 @@
 
 package it.smartcommunitylab.mobilityservice.services;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
-@ComponentScan("it.smartcommunitylab.mobilityservice.services.test")
+import com.mashape.unirest.http.ObjectMapper;
+import com.mashape.unirest.http.Unirest;
+
+@ComponentScan("it.smartcommunitylab.mobilityservice.services")
 @Configuration
 @EnableScheduling
-//@PropertySource(value = "classpath:mobility.properties")
 public class MobilityServicesConfig {
 
-//	private static final String MOBILITY_SERVICES = "mobility_services";
+	private static final String MOBILITY_SERVICES = "mobility_services";
 	
-//	@Autowired
-//	private Environment env;
+	@PostConstruct
+	public void init() {
+		Unirest.setObjectMapper(new ObjectMapper() {
+			private com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
 
-//	@Bean
-//	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-//		return new PropertySourcesPlaceholderConfigurer();
-//	}
+			public <T> T readValue(String value, Class<T> valueType) {
+				try {
+					return mapper.readValue(value, valueType);
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			}
+
+			public String writeValue(Object value) {
+				try {
+					return mapper.writeValueAsString(value);
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			}
+		});		
+	}
 	
 	@Bean
 	public static ThreadPoolTaskScheduler getThreadPoolTaskScheduler() {
 		ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+		scheduler.setPoolSize(10);
 		scheduler.initialize();
 		return scheduler;
 	}
 
+	
 }
