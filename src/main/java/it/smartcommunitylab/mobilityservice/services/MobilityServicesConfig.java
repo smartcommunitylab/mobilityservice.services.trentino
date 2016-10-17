@@ -21,6 +21,8 @@ import javax.annotation.PostConstruct;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
@@ -30,10 +32,9 @@ import com.mashape.unirest.http.Unirest;
 @ComponentScan("it.smartcommunitylab.mobilityservice.services")
 @Configuration
 @EnableScheduling
+@PropertySource(value = "classpath:mobility.properties")
 public class MobilityServicesConfig {
 
-	private static final String MOBILITY_SERVICES = "mobility_services";
-	
 	@PostConstruct
 	public void init() {
 		Unirest.setObjectMapper(new ObjectMapper() {
@@ -56,6 +57,11 @@ public class MobilityServicesConfig {
 			}
 		});		
 	}
+	
+	@Bean 
+	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+	return new PropertySourcesPlaceholderConfigurer();
+	}	
 	
 	@Bean
 	public static ThreadPoolTaskScheduler getThreadPoolTaskScheduler() {

@@ -1,0 +1,4 @@
+servicesInstances:
+  - class: it.smartcommunitylab.mobilityservice.services.test.ServiceTest
+    refresh: "*/10 * * * * *"
+    alias: test-service
