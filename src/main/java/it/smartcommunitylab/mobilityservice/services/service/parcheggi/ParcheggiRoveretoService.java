@@ -9,6 +9,7 @@ import it.smartcommunitylab.mobilityservice.services.MobilityServiceException;
 import it.smartcommunitylab.mobilityservice.services.MobilityServiceObject;
 import it.smartcommunitylab.mobilityservice.services.MobilityServiceObjectsContainer;
 import it.smartcommunitylab.mobilityservice.services.service.parcheggi.model.Parcheggio;
+import it.smartcommunitylab.mobilityservice.services.util.AuthHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,19 +61,6 @@ public class ParcheggiRoveretoService extends MobilityService {
 		}
 	}
 
-	// @Override
-	// protected void publishData(MobilityServiceObjectsContainer data) throws
-	// MobilityServiceException {
-	// Parcheggio t = Parcheggio.parseFrom(bs);
-	// Parking p = new Parking();
-	// p.setAgencyId(source);
-	// p.setId(t.getId());
-	// p.setAddress(t.getAddress());
-	// p.setFreePlaces(Integer.parseInt(t.getPlaces()));
-	// p.setVehicles(-1);
-	// list.add(p);
-	// }
-
 	@Override
 	protected int publishData(MobilityServiceObjectsContainer data) throws MobilityServiceException {
 		try {
@@ -105,7 +93,7 @@ public class ParcheggiRoveretoService extends MobilityService {
 			}
 //			ObjectMapper mapper = new ObjectMapper();
 //			mapper.writerWithDefaultPrettyPrinter().writeValue(new File("parcheggi_rovereto.txt"), list);
-			return Unirest.post("http://localhost:8080/core.mobility/servicedata/publishAlertParkings").header("Accept", "application/json").header("Content-Type", "application/json").body(list).asString().getStatus();
+			return Unirest.post("http://localhost:8080/core.mobility/servicedata/publishAlertParkings").header("Accept", "application/json").header("Content-Type", "application/json").basicAuth(AuthHelper.getInstance().getUser(), AuthHelper.getInstance().getPassword()).body(list).asString().getStatus();
 
 		} catch (Exception e) {
 			throw new MobilityServiceException(e);
