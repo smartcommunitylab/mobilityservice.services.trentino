@@ -125,6 +125,7 @@ public class MobilityServicesManager {
 				logger.debug("Published data for service " + service + ".");
 			}
 		} catch (Exception e) {
+			logger.info("Service " + service + " failed.");
 			e.printStackTrace();
 		}
 
