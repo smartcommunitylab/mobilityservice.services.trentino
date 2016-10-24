@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @PropertySource(value = "classpath:mobility.properties")
-public class AuthHelper {
+public class ConnectionHelper {
 
 //	private static final String PATH_TOKEN = "oauth/token";
 //
@@ -24,8 +24,10 @@ public class AuthHelper {
 //	private String token = null;
 //	private Long expiresAt = null;
 //	
-	private static AuthHelper instance;
+	private static ConnectionHelper instance;
 	
+	@Value("${mobility.url}")
+	private String mobilityURL;
 	@Value("${services.user}")
 	private String user;
 	@Value("${services.password}")
@@ -36,10 +38,14 @@ public class AuthHelper {
 		instance = this;
 	}
 
-	public static AuthHelper getInstance() {
+	public static ConnectionHelper getInstance() {
 		return instance;
 	}
 	
+	public String getMobilityURL() {
+		return mobilityURL;
+	}
+
 	public String getUser() {
 		return user;
 	}

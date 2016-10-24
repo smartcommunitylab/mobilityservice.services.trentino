@@ -26,7 +26,7 @@ import it.smartcommunitylab.mobilityservice.services.MobilityServiceObject;
 import it.smartcommunitylab.mobilityservice.services.MobilityServiceObjectsContainer;
 import it.smartcommunitylab.mobilityservice.services.service.ordinanzerovereto.model.Ordinanza;
 import it.smartcommunitylab.mobilityservice.services.service.ordinanzerovereto.model.Via;
-import it.smartcommunitylab.mobilityservice.services.util.AuthHelper;
+import it.smartcommunitylab.mobilityservice.services.util.ConnectionHelper;
 
 import java.net.URL;
 import java.text.ParseException;
@@ -127,7 +127,7 @@ public class OrdinanzeRoveretoService extends MobilityService {
 
 //			ObjectMapper mapper = new ObjectMapper();
 //			mapper.writerWithDefaultPrettyPrinter().writeValue(new File("ordinanze.txt"), list);
-			return Unirest.post("http://localhost:8080/core.mobility/servicedata/publishAlertRoads").header("Accept", "application/json").header("Content-Type", "application/json").basicAuth(AuthHelper.getInstance().getUser(), AuthHelper.getInstance().getPassword()).body(list).asString().getStatus();
+			return Unirest.post(ConnectionHelper.getInstance().getMobilityURL() + "servicedata/publishAlertRoads").header("Accept", "application/json").header("Content-Type", "application/json").basicAuth(ConnectionHelper.getInstance().getUser(), ConnectionHelper.getInstance().getPassword()).body(list).asString().getStatus();
 		} catch (Exception e) {
 			throw new MobilityServiceException(e);
 		}

@@ -11,7 +11,7 @@ import it.smartcommunitylab.mobilityservice.services.service.trentomale.model.St
 import it.smartcommunitylab.mobilityservice.services.service.trentomale.model.Treni;
 import it.smartcommunitylab.mobilityservice.services.service.trentomale.model.Treno;
 import it.smartcommunitylab.mobilityservice.services.service.trentomale.model.TrentoMaleTrain;
-import it.smartcommunitylab.mobilityservice.services.util.AuthHelper;
+import it.smartcommunitylab.mobilityservice.services.util.ConnectionHelper;
 import it.smartcommunitylab.mobilityservice.services.util.GenericTrain;
 import it.smartcommunitylab.mobilityservice.services.util.TrainsConverter;
 
@@ -111,7 +111,7 @@ public class TrentoMaleService extends MobilityService {
 //			ObjectMapper mapper = new ObjectMapper();
 //			mapper.writerWithDefaultPrettyPrinter().writeValue(new File("trentomale.txt"), list);
 //			return 200;
-			return Unirest.post("http://localhost:8080/core.mobility/servicedata/publishAlertDelays").header("Accept", "application/json").header("Content-Type", "application/json").basicAuth(AuthHelper.getInstance().getUser(), AuthHelper.getInstance().getPassword()).body(list).asString().getStatus();
+			return Unirest.post(ConnectionHelper.getInstance().getMobilityURL() + "servicedata/publishAlertDelays").header("Accept", "application/json").header("Content-Type", "application/json").basicAuth(ConnectionHelper.getInstance().getUser(), ConnectionHelper.getInstance().getPassword()).body(list).asString().getStatus();
 		} catch (Exception e) {
 			throw new MobilityServiceException(e);
 		}

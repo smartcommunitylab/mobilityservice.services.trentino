@@ -9,7 +9,7 @@ import it.smartcommunitylab.mobilityservice.services.MobilityServiceException;
 import it.smartcommunitylab.mobilityservice.services.MobilityServiceObject;
 import it.smartcommunitylab.mobilityservice.services.MobilityServiceObjectsContainer;
 import it.smartcommunitylab.mobilityservice.services.service.parcheggi.model.Parcheggio;
-import it.smartcommunitylab.mobilityservice.services.util.AuthHelper;
+import it.smartcommunitylab.mobilityservice.services.util.ConnectionHelper;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -120,7 +120,7 @@ public class ParcheggiTrentoService extends MobilityService {
 			}
 //			ObjectMapper mapper = new ObjectMapper();
 //			mapper.writerWithDefaultPrettyPrinter().writeValue(new File("parcheggi_trento.txt"), list);
-			return Unirest.post("http://localhost:8080/core.mobility/servicedata/publishAlertParkings").header("Accept", "application/json").header("Content-Type", "application/json").basicAuth(AuthHelper.getInstance().getUser(), AuthHelper.getInstance().getPassword()).body(list).asString().getStatus();
+			return Unirest.post(ConnectionHelper.getInstance().getMobilityURL() + "servicedata/publishAlertParkings").header("Accept", "application/json").header("Content-Type", "application/json").basicAuth(ConnectionHelper.getInstance().getUser(), ConnectionHelper.getInstance().getPassword()).body(list).asString().getStatus();
 		} catch (Exception e) {
 			throw new MobilityServiceException(e);
 		}

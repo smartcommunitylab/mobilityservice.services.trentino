@@ -26,7 +26,7 @@ import it.smartcommunitylab.mobilityservice.services.MobilityServiceObjectsConta
 import it.smartcommunitylab.mobilityservice.services.service.tobike.model.Station;
 import it.smartcommunitylab.mobilityservice.services.service.tobike.model.TobikeStation;
 import it.smartcommunitylab.mobilityservice.services.service.tobike.ws.TOBikeUtente;
-import it.smartcommunitylab.mobilityservice.services.util.AuthHelper;
+import it.smartcommunitylab.mobilityservice.services.util.ConnectionHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,8 +139,8 @@ public class TobikeService extends MobilityService {
 //			ObjectMapper mapper = new ObjectMapper();
 //			mapper.writerWithDefaultPrettyPrinter().writeValue(new File("parcheggi_" + data.getInfo().get(AGENCY_ID) + ".txt"), alertList);
 //			mapper.writerWithDefaultPrettyPrinter().writeValue(new File("stazioni_" + data.getInfo().get(AGENCY_ID) + ".txt"), stations);
-			Unirest.post("http://localhost:8080/core.mobility/servicedata/publishBikeStations/" + data.getInfo().get(NAME) + "/" + data.getInfo().get(AGENCY_ID)).header("Accept", "application/json").header("Content-Type", "application/json").basicAuth(AuthHelper.getInstance().getUser(), AuthHelper.getInstance().getPassword()).body(stations).asString().getStatus();
-			return Unirest.post("http://localhost:8080/core.mobility/servicedata/publishAlertParkings").header("Accept", "application/json").header("Content-Type", "application/json").basicAuth(AuthHelper.getInstance().getUser(), AuthHelper.getInstance().getPassword()).body(alertList).asString().getStatus();
+			Unirest.post(ConnectionHelper.getInstance().getMobilityURL() + "servicedata/publishBikeStations/" + data.getInfo().get(NAME) + "/" + data.getInfo().get(AGENCY_ID)).header("Accept", "application/json").header("Content-Type", "application/json").basicAuth(ConnectionHelper.getInstance().getUser(), ConnectionHelper.getInstance().getPassword()).body(stations).asString().getStatus();
+			return Unirest.post(ConnectionHelper.getInstance().getMobilityURL() + "servicedata/publishAlertParkings").header("Accept", "application/json").header("Content-Type", "application/json").basicAuth(ConnectionHelper.getInstance().getUser(), ConnectionHelper.getInstance().getPassword()).body(alertList).asString().getStatus();
 		} catch (Exception e) {
 			throw new MobilityServiceException(e);
 		}
