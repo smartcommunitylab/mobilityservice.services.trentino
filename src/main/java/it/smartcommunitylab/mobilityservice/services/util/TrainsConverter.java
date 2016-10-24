@@ -42,7 +42,7 @@ public class TrainsConverter {
 
 	private static Logger logger = LoggerFactory.getLogger(TrainsConverter.class);
 
-	public static AlertDelay checkDelay(GenericTrain train) {
+	public static AlertDelay generateDelay(GenericTrain train) {
 		AlertDelay delay = new AlertDelay();
 		delay.setCreatorId("");
 		delay.setCreatorType(CreatorType.SERVICE);

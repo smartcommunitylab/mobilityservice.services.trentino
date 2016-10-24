@@ -103,7 +103,7 @@ public class TrentoMaleService extends MobilityService {
 				TrentoMaleTrain tmt = (TrentoMaleTrain)bs;
 			
 				GenericTrain gt = TrainsConverter.convertTrentoMale(tmt);
-				AlertDelay ad = TrainsConverter.checkDelay(gt);
+				AlertDelay ad = TrainsConverter.generateDelay(gt);
 				list.add(ad);
 			}
 

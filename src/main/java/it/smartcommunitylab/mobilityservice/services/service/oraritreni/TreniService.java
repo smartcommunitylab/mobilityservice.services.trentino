@@ -121,7 +121,7 @@ public class TreniService extends MobilityService {
 			
 				List<GenericTrain> gts = TrainsConverter.buildTrain(pa);
 				for (GenericTrain gt: gts) {
-					AlertDelay ad = TrainsConverter.checkDelay(gt);
+					AlertDelay ad = TrainsConverter.generateDelay(gt);
 					list.add(ad);
 				}
 			}
