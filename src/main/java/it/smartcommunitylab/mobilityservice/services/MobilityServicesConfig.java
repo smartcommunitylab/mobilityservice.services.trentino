@@ -56,6 +56,8 @@ public class MobilityServicesConfig {
 				}
 			}
 		});		
+		
+		Unirest.setTimeouts(10000, 45000);
 	}
 	
 	@Bean 
@@ -66,7 +68,7 @@ public class MobilityServicesConfig {
 	@Bean
 	public static ThreadPoolTaskScheduler getThreadPoolTaskScheduler() {
 		ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-		scheduler.setPoolSize(10);
+		scheduler.setPoolSize(50);
 		scheduler.initialize();
 		return scheduler;
 	}
