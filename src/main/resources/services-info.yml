@@ -34,7 +34,55 @@ servicesInstances:
       name: trento
       place: Trento    
       agencyId: BIKE_SHARING_TOBIKE_TRENTO  
-    enabled: true        
+    enabled: true
+  - class: it.smartcommunitylab.mobilityservice.services.service.tobike.TobikeService
+    alias: bikesharing-lavis
+    refresh: "0 * * * * *"
+    parameters:
+      user: "rovereto"
+      password: 
+      code: "5100"
+    info:
+      name: lavis
+      place: Lavis    
+      agencyId: BIKE_SHARING_TOBIKE_LAVIS  
+    enabled: true
+  - class: it.smartcommunitylab.mobilityservice.services.service.tobike.TobikeService
+    alias: bikesharing-mezzocorona
+    refresh: "0 * * * * *"
+    parameters:
+      user: "rovereto"
+      password: 
+      code: "5093"
+    info:
+      name: mezzocorona
+      place: Mezzocorona    
+      agencyId: BIKE_SHARING_TOBIKE_MEZZOCORONA  
+    enabled: true
+  - class: it.smartcommunitylab.mobilityservice.services.service.tobike.TobikeService
+    alias: bikesharing-mezzolombardo
+    refresh: "0 * * * * *"
+    parameters:
+      user: "rovereto"
+      password: 
+      code: "5092"
+    info:
+      name: mezzolombardo
+      place: Mezzolombardo    
+      agencyId: BIKE_SHARING_TOBIKE_MEZZOLOMBARDO  
+    enabled: true
+  - class: it.smartcommunitylab.mobilityservice.services.service.tobike.TobikeService
+    alias: bikesharing-sanmichele
+    refresh: "0 * * * * *"
+    parameters:
+      user: "rovereto"
+      password: 
+      code: "5094"
+    info:
+      name: sanmichelealladige
+      place: San Michele all'Adige    
+      agencyId: BIKE_SHARING_TOBIKE_SAN_MICHELE_ALL_ADIGE  
+    enabled: true                
   - class: it.smartcommunitylab.mobilityservice.services.service.oraritreni.TreniService
     alias: treni
     refresh: "0 * * * * *"
