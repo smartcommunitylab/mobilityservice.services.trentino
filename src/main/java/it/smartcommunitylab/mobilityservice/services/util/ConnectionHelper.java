@@ -32,6 +32,9 @@ public class ConnectionHelper {
 	private String user;
 	@Value("${services.password}")
 	private String password;	
+	
+	@Value("${parking.trento.url}")
+	private String trentoParkingUrl;
 
 	@PostConstruct
 	public void init() {
@@ -52,6 +55,10 @@ public class ConnectionHelper {
 	
 	public String getPassword() {
 		return password;
+	}
+
+	public String getTrentoParkingUrl() {
+		return trentoParkingUrl;
 	}
 
 //	public String getToken() {
