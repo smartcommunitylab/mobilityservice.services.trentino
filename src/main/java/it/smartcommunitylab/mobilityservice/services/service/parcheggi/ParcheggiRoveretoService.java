@@ -31,7 +31,7 @@ public class ParcheggiRoveretoService extends MobilityService {
 			List<MobilityServiceObject> result = Lists.newArrayList();
 
 			Object res;
-			XmlRpcClient client = new XmlRpcClient("http://88.51.119.253:8070/RPC2", true);
+			XmlRpcClient client = new XmlRpcClient("http://metroparco1.amr-rovereto.it:8070/RPC2", true);
 			res = client.invoke("pGuide.getElencoIdentificativiParcheggi", new Object[0]);
 
 			for (Object o : (XmlRpcArray) res) {
