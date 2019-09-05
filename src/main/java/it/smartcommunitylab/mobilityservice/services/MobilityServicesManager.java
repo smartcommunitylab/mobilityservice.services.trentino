@@ -16,6 +16,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.scheduling.support.PeriodicTrigger;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -134,9 +135,11 @@ public class MobilityServicesManager {
 
 	private void schedule(MobilityService service) {
 		String schedule = service.getRefresh();
-		Trigger trigger = buildTrigger(schedule);
 		MobilityServiceTask task = new MobilityServiceTask(this, service);
-		ScheduledFuture<MobilityService> future = (ScheduledFuture<MobilityService>) scheduler.schedule(task, trigger);
+		ScheduledFuture<MobilityService> future = 
+				  service.getInterval() != null && service.getInterval() > 0
+				? (ScheduledFuture<MobilityService>) scheduler.scheduleAtFixedRate(task, service.getInterval())
+				: (ScheduledFuture<MobilityService>) scheduler.schedule(task, buildTrigger(schedule));
 		scheduledFutures.put(service, future);
 		logger.info("Scheduling service " + service + ": " + schedule);
 

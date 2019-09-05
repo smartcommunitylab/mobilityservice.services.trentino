@@ -15,6 +15,7 @@ public abstract class MobilityService {
 	protected Map<String, Object> info;
 	
 	protected String refresh;
+	protected Long interval;
 
 	protected Boolean enabled = true;
 
@@ -79,6 +80,14 @@ public abstract class MobilityService {
 	@Override
 	public String toString() {
 		return "[" + (alias != null ? alias : (serviceId + ": " + parameters)) + "]";
+	}
+
+	public Long getInterval() {
+		return interval;
+	}
+
+	public void setInterval(Long interval) {
+		this.interval = interval;
 	}
 
 }
