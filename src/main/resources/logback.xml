@@ -11,7 +11,7 @@
 	</appender>
 
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>/home/dev/services.log</file>
+    <file>/home/dev/mobilitylogs/services.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <!-- daily rollover -->
       <fileNamePattern>services.%d{yyyy-MM-dd}.log</fileNamePattern>
