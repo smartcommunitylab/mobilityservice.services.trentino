@@ -2,6 +2,8 @@ package it.smartcommunitylab.mobilityservice.services;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 
 import javax.annotation.PostConstruct;
@@ -16,7 +18,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.scheduling.support.PeriodicTrigger;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -42,7 +43,7 @@ public class MobilityServicesManager {
 
 	@Autowired
 	private ThreadPoolTaskScheduler scheduler;
-
+	
 	private Map<String, MobilityService> servicesAliases;
 	private List<Map<String, Object>> servicesInstances;
 
@@ -152,7 +153,10 @@ public class MobilityServicesManager {
 		} catch (NumberFormatException e) {
 			return new CronTrigger(refresh);
 		}
-	}	
-	
+	}
+
+	public ThreadPoolTaskScheduler getScheduler() {
+		return scheduler;
+	}
 
 }
