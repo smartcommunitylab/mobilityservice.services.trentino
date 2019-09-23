@@ -15,6 +15,8 @@ public class MobilityServiceTask implements Runnable {
 	private MobilityService service;
 	private volatile boolean running = false;
 	
+	private static final long MAX_WAIT = 60000;
+	
 	public MobilityServiceTask(MobilityServicesManager manager, MobilityService service) {
 		super();
 		this.manager = manager;
@@ -32,7 +34,15 @@ public class MobilityServiceTask implements Runnable {
 			}
 		});
 		try {
-			Thread.sleep(60000);
+			long timeout = 0l;
+			while (timeout < MAX_WAIT) {
+				Thread.sleep(1000);
+				if (!running) {
+					System.err.println("Done in time: "+ timeout);
+					break;
+				}
+				timeout +=1000; 
+			}
 			if (running) {
 		    	 logger.error("Cancelling service " + service);
 				handler.cancel(true);
