@@ -38,7 +38,6 @@ public class MobilityServiceTask implements Runnable {
 			while (timeout < MAX_WAIT) {
 				Thread.sleep(1000);
 				if (!running) {
-					System.err.println("Done in time: "+ timeout);
 					break;
 				}
 				timeout +=1000; 
